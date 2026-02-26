@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 from utilities import FileReader
 
@@ -19,13 +20,20 @@ def plot_errors(filename):
     
     fig, axes = plt.subplots(1,2, figsize=(14,6))
 
+    plot_title = os.path.splitext(os.path.basename(filename))[0].replace('_', ' ').title()
+    plot_title = plot_title.replace('Pid', 'PID').replace('Pd', 'PD')
+    fig.suptitle(plot_title, fontsize=16)
 
     axes[0].plot([lin[0] for lin in values], [lin[1] for lin in values])
     axes[0].set_title("state space")
+    axes[0].set_xlabel("Linear Error, e (m)")
+    axes[0].set_ylabel("Error Derivative, e_dot (m/s)")
     axes[0].grid()
 
     
     axes[1].set_title("each individual state")
+    axes[1].set_xlabel("Elapsed Time (ns)")
+    axes[1].set_ylabel("Error State Magnitude")
     for i in range(0, len(headers) - 1):
         axes[1].plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
 
